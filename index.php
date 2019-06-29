@@ -75,13 +75,8 @@ $bot->on(function($Update) use ($bot){
 	$message = $Update->getMessage();
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
-    $bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
-	if(mb_stripos($mtext,"Сиськи") !== false){
-		$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg";
 
-		$bot->sendPhoto($message->getChat()->getId(), $pic);
-	}
-	if(mb_stripos($mtext,"власть советам") !== false){
+	if(strpos($mtext,"власть советам") !== false ){
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	}
 
