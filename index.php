@@ -32,9 +32,7 @@ if(!file_exists("registered.trigger")){
 
 	// URl текущей страницы
 	$page_url = "https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-	echo $page_url;
 	$result = $bot->setWebhook($page_url);
-    echo $result;
 	if($result){
 		file_put_contents("registered.trigger",time()); // создаем файл дабы прекратить повторные регистрации
 	} else die("ошибка регистрации");
@@ -48,7 +46,7 @@ $bot->command('ping', function ($message) use ($bot) {
 
 // обязательное. Запуск бота
 $bot->command('start', function ($message) use ($bot) {
-    $answer = 'Добро пожаловать!';
+    $answer = 'Добро пожаловать! Чат ид = '.$message->getChat()->getId();
     $bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
