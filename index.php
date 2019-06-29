@@ -8,7 +8,7 @@ header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
 echo "123";
-
+exit;
 // дебаг
 if(true){
 	error_reporting(E_ALL & ~(E_NOTICE | E_USER_NOTICE | E_DEPRECATED));
