@@ -84,6 +84,7 @@ $bot->on(function($Update) use ($bot){
 	if(mb_stripos($mtext,"власть советам") !== false){
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	}
+    $bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 }, function($message) use ($name){
 	return true; // когда тут true - команда проходит
 });
