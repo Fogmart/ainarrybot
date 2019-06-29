@@ -29,7 +29,7 @@ if(!file_exists("registered.trigger")){
 	 * файл registered.trigger будет создаваться после регистрации бота.
 	 * если этого файла нет значит бот не зарегистрирован
 	 */
-
+echo 123;
 	// URl текущей страницы
 	$page_url = "https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 	$result = $bot->setWebhook($page_url);
@@ -170,7 +170,7 @@ $bot->on(function($Update) use ($bot){
 }, function($message) use ($name){
 	return true; // когда тут true - команда проходит
 });
-
+echo $bot->getRawBody();
 // запускаем обработку
 $bot->run();
 
