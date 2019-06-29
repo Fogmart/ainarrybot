@@ -29,10 +29,12 @@ if(!file_exists("registered.trigger")){
 	 * файл registered.trigger будет создаваться после регистрации бота.
 	 * если этого файла нет значит бот не зарегистрирован
 	 */
-echo 123;
+
 	// URl текущей страницы
 	$page_url = "https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	echo $page_url;
 	$result = $bot->setWebhook($page_url);
+    echo $result;
 	if($result){
 		file_put_contents("registered.trigger",time()); // создаем файл дабы прекратить повторные регистрации
 	} else die("ошибка регистрации");
