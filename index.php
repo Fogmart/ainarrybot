@@ -6,7 +6,7 @@
  */
 header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
-require_once("vendor/autoload.php");
+require __DIR__.'/vendor/autoload.php';
 
 // дебаг
 if(true){
