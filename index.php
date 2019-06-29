@@ -1,9 +1,4 @@
 <?php
-/**
- * revcom_bot
- *
- * @author - Александр Штокман
- */
 header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
@@ -50,6 +45,7 @@ $bot->command('start', function ($message) use ($bot) {
     $bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
+
 // помощ
 $bot->command('help', function ($message) use ($bot) {
     $answer = 'Команды:
@@ -57,100 +53,21 @@ $bot->command('help', function ($message) use ($bot) {
     $bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
-// передаем картинку
-$bot->command('getpic', function ($message) use ($bot) {
-	$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/03/photo_2016-12-13_23-21-07.jpg";
 
-    $bot->sendPhoto($message->getChat()->getId(), $pic);
+$bot->command('api', function ($message) use ($bot) {
+
+    $data_string = "tt=54";
+    $url = "http://alevd.ru/apitst.php";
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string );
+    $answer = curl_exec($curl);
+
+    $bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
-// передаем документ
-$bot->command('getdoc', function ($message) use ($bot) {
-	$document = new \CURLFile('shtirner.txt');
-
-    $bot->sendDocument($message->getChat()->getId(), $document);
-});
-
-// Кнопки у сообщений
-$bot->command("ibutton", function ($message) use ($bot) {
-	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-		[
-			[
-				['callback_data' => 'data_test', 'text' => 'Answer'],
-				['callback_data' => 'data_test2', 'text' => 'ОтветЪ']
-			]
-		]
-	);
-
-	$bot->sendMessage($message->getChat()->getId(), "тест", false, null,null,$keyboard);
-});
-
-// Обработка кнопок у сообщений
-$bot->on(function($update) use ($bot, $callback_loc, $find_command){
-	$callback = $update->getCallbackQuery();
-	$message = $callback->getMessage();
-	$chatId = $message->getChat()->getId();
-	$data = $callback->getData();
-
-	if($data == "data_test"){
-		$bot->answerCallbackQuery( $callback->getId(), "This is Ansver!",true);
-	}
-	if($data == "data_test2"){
-		$bot->sendMessage($chatId, "Это ответ!");
-		$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
-	}
-
-}, function($update){
-	$callback = $update->getCallbackQuery();
-	if (is_null($callback) || !strlen($callback->getData()))
-		return false;
-	return true;
-});
-
-// обработка инлайнов
-$bot->inlineQuery(function ($inlineQuery) use ($bot) {
-	mb_internal_encoding("UTF-8");
-	$qid = $inlineQuery->getId();
-	$text = $inlineQuery->getQuery();
-
-	// Это - базовое содержимое сообщения, оно выводится, когда тыкаем на выбранный нами инлайн
-	$str = "Что другие?";
-	$base = new \TelegramBot\Api\Types\Inline\InputMessageContent\Text($str,"Html");
-
-	// Это список инлайнов
-	// инлайн для стихотворения
-	$msg = new \TelegramBot\Api\Types\Inline\QueryResult\Article("1","С. Есенин","Отрывок из поэмы `Страна негодяев`");
-	$msg->setInputMessageContent($base); // указываем, что в ответ к этому сообщению надо показать стихотворение
-
-	// инлайн для картинки
-	$full = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg"; // собственно урл на картинку
-	$thumb = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961-150x150.jpg"; // и миниятюра
-
-	$photo = new \TelegramBot\Api\Types\Inline\QueryResult\Photo("2",$full,$thumb);
-
-	// инлайн для музыки
-	$url = "http://aftamat4ik.ru/wp-content/uploads/2017/05/mongol-shuudan_-_kozyr-nash-mandat.mp3";
-	$mp3 = new \TelegramBot\Api\Types\Inline\QueryResult\Audio("3",$url,"Монгол Шуудан - Козырь наш Мандат!");
-
-	// инлайн для видео
-	$vurl = "http://aftamat4ik.ru/wp-content/uploads/2017/05/bb.mp4";
-	$thumb = "http://aftamat4ik.ru/wp-content/uploads/2017/05/joker_5-150x150.jpg";
-	$video = new \TelegramBot\Api\Types\Inline\QueryResult\Video("4",$vurl,$thumb, "video/mp4","коммунальные службы","тут тоже может быть описание");
-
-	// отправка
-	try{
-		$result = $bot->answerInlineQuery( $qid, [$msg,$photo,$mp3,$video],100,false);
-	}catch(Exception $e){
-		file_put_contents("rdata",print_r($e,true));
-	}
-});
-
-// Reply-Кнопки
-$bot->command("buttons", function ($message) use ($bot) {
-	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
-
-	$bot->sendMessage($message->getChat()->getId(), "тест", false, null,null, $keyboard);
-});
 
 // Отлов любых сообщений + обрабтка reply-кнопок
 $bot->on(function($Update) use ($bot){
